@@ -43,6 +43,6 @@ Before running the tests, ensure you have the following installed:
 
 
 ## If facing issues Install Dependencies
-npm install
-npx playwright install
-npm init playwright@latest
+```npm install```
+```npx playwright install```
+```npm init playwright@latest```
