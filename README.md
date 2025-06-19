@@ -41,7 +41,7 @@ Before running the tests, ensure you have the following installed:
 ## Hit the below command for display the report
 ``npx playwright show-report``
 
-![image](https://github.com/user-attachments/assets/e65b415f-0bba-471a-847b-b5c39ea1d526)
+![image](https://github.com/user-attachments/assets/8bd20727-d2cd-48ff-80b2-4a564ade7de7)
 
 ---
 
