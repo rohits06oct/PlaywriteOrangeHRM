@@ -1,15 +1,35 @@
 const { expect } = require('@playwright/test');
+const { NavigationPage } = require('./NavigationPage');
 
-class LoginPage {
+class LoginPage extends NavigationPage {
   /**
    * @param {import('@playwright/test').Page} page
    */
   constructor(page) {
+    super(page);
     this.page = page;
+    this.loginCredentials = page.locator("div[class*='demo-credentials'] p");
     this.usernameInput = page.locator("input[name='username']");
     this.passwordInput = page.locator("input[name='password']");
     this.loginButton = page.locator("button[type='submit']");
-    this.dashboardHeader = page.locator(".oxd-topbar-header-breadcrumb > .oxd-text");
+  }
+
+  async fetchStoreLoginDetails(){
+    let credentialsMap = new Map();
+    await this.loginCredentials.first().waitFor({ state: 'visible' });
+    const credentials = await this.loginCredentials.all();
+    for (const pElement of credentials) {
+    const text = await pElement.textContent();
+        if (text) {
+        const parts = text.split(' : ');
+        if (parts.length === 2) {
+            const key = parts[0].trim();
+            const value = parts[1].trim();
+            credentialsMap.set(key, value);
+            }
+        }
+    }
+    return credentialsMap;
   }
 
   async login(username, password) {
@@ -19,12 +39,9 @@ class LoginPage {
     await this.loginButton.click();
   }
 
-  async validatePageLoad(expectedTitle) {
-    const expected = String(expectedTitle).toLowerCase();
-    await this.dashboardHeader.waitFor({ state: 'visible' });
-    await expect(this.page).toHaveURL(new RegExp("/"+expected+"/"));
-    await expect(this.page.url()).toContain(expected);
-    await expect(this.dashboardHeader).toContainText(expectedTitle);
+    async validateLoginCredentials(username, password) {
+    await expect(username).toBe('Admin');
+    await expect(password).toBe('admin123');
   }
 
 }
