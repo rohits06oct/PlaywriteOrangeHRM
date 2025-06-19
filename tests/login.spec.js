@@ -1,10 +1,12 @@
-// @ts-check
 import { test, expect } from '@playwright/test';
+const { LoginPage } = require('./pages/LoginPage');
 
 let credentialsMap = new Map();
+let loginPage;
 
 test.beforeEach('Open the URL', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+   loginPage = new LoginPage(page);
+   await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
 });
 
 test('On login page Store the Username and password', async ({ page }) => {
@@ -21,18 +23,12 @@ test('On login page Store the Username and password', async ({ page }) => {
             }
         }
     }
-
-    console.log("Extracted Credentials Map:", credentialsMap);
     await expect(credentialsMap.get('Username')).toBe('Admin');
     await expect(credentialsMap.get('Password')).toBe('admin123');
 });
 
 test('Fill login details and login successfully', async ({ page }) => {
-    await page.locator("//input[@placeholder='Username']").fill(credentialsMap.get('Username'));
-    await page.locator("//input[@placeholder='Password']").fill(credentialsMap.get('Password'));
-    await page.locator("//button[@type='submit']").click();
-    await page.waitForSelector("//h6[contains(@class,'h6 oxd-topbar-header')]");
-    const dashboardTitle = await page.locator("//h6[contains(@class,'h6 oxd-topbar-header')]");
+    await loginPage.login(credentialsMap.get('Username'), credentialsMap.get('Password'));
+    await loginPage.validatePageLoad("Dashboard");
     await page.context().storageState({path: "login.json"});
-    await expect(dashboardTitle).toHaveText('Dashboard');
 });
