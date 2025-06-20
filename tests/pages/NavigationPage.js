@@ -10,11 +10,13 @@ class NavigationPage {
     this.dashboardHeader = page.locator(".oxd-topbar-header-breadcrumb > .oxd-text").first();
   }
 
+  // Click on the left side menu items based on the menu name
   async clickMenuItem(name) {
     await this.menuButton(name).waitFor({ state: 'visible' });
     await this.menuButton(name).click();
   }
 
+  // Checking the correct menu page is opened and URL validation
   async validateMenuItem(expectedTitle) {
     const expected = String(expectedTitle).toLowerCase();
     await this.dashboardHeader.waitFor({ state: 'visible' });

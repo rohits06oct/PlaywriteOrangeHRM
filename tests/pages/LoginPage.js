@@ -14,6 +14,7 @@ class LoginPage extends NavigationPage {
     this.loginButton = page.locator("button[type='submit']");
   }
 
+  // Fetching the login details from the page and store it inside the map
   async fetchStoreLoginDetails(){
     let credentialsMap = new Map();
     await this.loginCredentials.first().waitFor({ state: 'visible' });
@@ -32,6 +33,7 @@ class LoginPage extends NavigationPage {
     return credentialsMap;
   }
 
+  // Performing login with map store credentials
   async login(username, password) {
     await this.loginButton.waitFor({ state: 'visible' });
     await this.usernameInput.fill(username);
@@ -39,6 +41,7 @@ class LoginPage extends NavigationPage {
     await this.loginButton.click();
   }
 
+  // Validating the map store credentials are correct or not
     async validateLoginCredentials(username, password) {
     await expect(username).toBe('Admin');
     await expect(password).toBe('admin123');
